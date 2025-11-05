@@ -1,0 +1,13 @@
+# Backup files
+*_backup.lua
+*.bak
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp_*
+.DS_Store
+
+# IDE/Editor files
+.vscode/
