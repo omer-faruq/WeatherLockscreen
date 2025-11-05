@@ -4,6 +4,10 @@ A comprehensive KOReader plugin that displays beautiful weather information on y
 
 ![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
 ![KOReader](https://img.shields.io/badge/KOReader-Plugin-orange.svg)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/loeffner/WeatherLockscreen/main)
+![GitHub Release](https://img.shields.io/github/v/release/:loeffner/:WeatherLockscreen)
+
+
 
 ## Features
 
@@ -17,20 +21,35 @@ A comprehensive KOReader plugin that displays beautiful weather information on y
 
 The plugin offers several display formats to customize your lockscreen:
 
-### Cover Display
-<img src="resources/cover.jpg" width="300">
-
-### Detail Display
-<img src="resources/detail.jpg" width="300">
-
-### Minimal Display
-<img src="resources/minimal.jpg" width="300">
-
-### Retro Analog Display
-<img src="resources/retro_analog.jpg" width="300">
-
-### Night Owl Display
-<img src="resources/night_owl.jpg" width="300">
+<table>
+  <tr>
+    <td align="center">
+      <strong>Detail Display</strong><br>
+      <img src="resources/detail.jpg" width="300">
+    </td>
+    <td align="center">
+      <strong>Minimal Display</strong><br>
+      <img src="resources/minimal.jpg" width="300">
+    </td>
+  </tr>
+  <tr>
+      <td align="center">
+      <strong>Cover Display</strong><br>
+      <img src="resources/cover.jpg" width="300">
+    </td>
+    <td align="center">
+      <strong>Retro Analog Display</strong><br>
+      <img src="resources/retro_analog.jpg" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Night Owl Display</strong><br>
+      <img src="resources/night_owl.jpg" width="300">
+    </td>
+    <td></td>
+  </tr>
+</table>
 
 ## Installation
 
@@ -57,11 +76,6 @@ The plugin offers several display formats to customize your lockscreen:
 
 1. Navigate to **Settings > Screen > Sleep screen > Wallpaper**
 2. Select **"Show weather on sleep screen"**
-
-## Requirements
-
-- KOReader (latest version recommended)
-- Active internet connection to fetch weather data
 
 ## How It Works
 
@@ -110,17 +124,17 @@ You can customize the fallback sun/moon icons:
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Development Setup
-
-1. Clone the repository
-2. Make your changes
-3. Test thoroughly on your KOReader device
-4. Submit a pull request with a clear description of your changes
-
 ## Related Projects
 
 - [KOReader](https://github.com/koreader/koreader) - The main KOReader project
 - [WeatherAPI.com](https://www.weatherapi.com/) - Weather data provider
+- [roygbyte/weather.koplugin](https://github.com/roygbyte/weather.koplugin/) - Inspiration for this project
+- [svgrepo.com](https://www.svgrepo.com/) - Provider of the arrows for the wind direction in the Retro Analog view
+
+### My user patches 
+
+- [loeffner/KOReader.patches](https://github.com/loeffner/KOReader.patches)
+
 
 ## Author
 
