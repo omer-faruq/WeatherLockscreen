@@ -7,7 +7,7 @@ A comprehensive KOReader plugin that displays beautiful weather information on y
 ![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
 ![KOReader](https://img.shields.io/badge/KOReader-Plugin-orange.svg)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/loeffner/WeatherLockscreen/main)
-![GitHub Release](https://img.shields.io/github/v/release/:loeffner/:WeatherLockscreen)
+![GitHub Release](https://img.shields.io/github/v/release/loeffner/WeatherLockscreen)
 
 
 
