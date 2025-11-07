@@ -21,7 +21,7 @@ A comprehensive KOReader plugin that displays beautiful weather information on y
 
 ## Installation
 
-1. Download the latest release from the [Releases](https://github.com/loeffner/weatherlockscreen.koplugin/releases) page
+1. Download the latest release from the [Releases](https://github.com/loeffner/WeatherLockscreen/releases) page
 2. Extract the `weatherlockscreen.koplugin` folder
 3. Copy it to your KOReader plugins directory:
    - **Kindle**: `/mnt/us/koreader/plugins/`
