@@ -128,10 +128,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Work in Progress
 
-- Dark Mode: Currently, the weather icons that are supplied by the API only look good in light mode.
-- Fallback: A more configurable fallback, when no weather data is available.
-- More display modes: I am always open for requests.
-- Testing: I tested on the koreader emulator and my kindle. I would love to hear feedback from users of other devices.
+- **Dark Mode**: Currently, the weather icons that are supplied by the API only look good in light mode.
+- **Localization**: Support more languages
+- **Fallback**: A more configurable fallback, when no weather data is available.
+- **More display modes**: I am always open for requests.
+- **Testing**: I tested on the koreader emulator and my kindle. I would love to hear feedback from users of other devices.
 
 ## Related Projects
 
