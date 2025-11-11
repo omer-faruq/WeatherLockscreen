@@ -111,42 +111,66 @@ The free tier allows 1 000 000 API calls per month.
 
 ## Customization
 
-### Custom Fallback Icons
-
+<details>
+<summary>Fallback Icons (sun/moon)</summary>
+   
 You can customize the fallback sun/moon icons:
 
 1. Create or download `sun.svg` and `moon.svg` icons
 2. Place them in `<koreader_data_dir>/icons/`
 3. The plugin will use these icons when weather data is unavailable
+</details>
 
 ## Troubleshooting
 
-### Weather not displaying
+<details>
+<summary>Weather not displaying</summary>
+   
 - Check your internet connection
 - Ensure your location is entered correctly
 - Check the KOReader log for error messages
+</details>
 
-### Icons not showing
+<details>
+<summary>Icons not showing</summary>
+
 - Ensure you have an active internet connection for the first fetch
 - Weather icons are automatically downloaded and cached
 - Check the cache directory has write permissions
+</details>
 
-### Outdated weather data
+<details>
+<summary>Outdated weather data</summary>
+
 - Weather data is cached for the configured time (1 hour default)
 - Enter sleep mode again to force a refresh after the cache expires
 - Check your internet connection
+</details>
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Work in Progress
-
-- **Dark Mode**: Currently, the weather icons that are supplied by the API only look good in light mode.
-- **Localization**: Support more languages
-- **Fallback**: A more configurable fallback, when no weather data is available.
-- **More display modes**: I am always open for requests.
-- **Testing**: I tested on the koreader emulator and my kindle. I would love to hear feedback from users of other devices.
+<details>
+<summary>Done</summary>
+   
+- Dark Mode: Currently, the weather icons that are supplied by the API only look good in light mode.
+- Improved Scaling: Make scaling more consistent / configurable
+</details>
+<details>
+<summary>In progress</summary>
+   
+- Bugfixing and final testing before new release
+</details>
+<details>
+<summary>Backlog</summary>
+   
+- Localization: Support more languages
+- Attempt connecting to wifi: See #1
+- Fallback: A more configurable fallback, when no weather data is available.
+- More display modes: I am always open for requests.
+</details>
 
 ## Related Projects
 
