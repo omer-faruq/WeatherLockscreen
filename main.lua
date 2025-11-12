@@ -295,7 +295,7 @@ function WeatherLockscreen:getSubMenuItems()
                         info_text = _("How much of the available screen height should be filled (in percent)"),
                         value = fill_percent,
                         value_min = 30,
-                        value_max = 100,
+                        value_max = 130,
                         value_step = 5,
                         value_hold_step = 10,
                         default_value = display_style ~= "reading" and 90 or 60,
@@ -446,12 +446,12 @@ function WeatherLockscreen:patchScreensaver()
             end
 
             -- Create weather widget
-            local weather_widget = plugin_instance:createWeatherWidget()
+            local weather_widget, fallback = plugin_instance:createWeatherWidget()
 
             if weather_widget then
                 local bg_color = Blitbuffer.COLOR_WHITE
                 local display_style = G_reader_settings:readSetting("weather_display_style") or "default"
-                if display_style == "nightowl" then
+                if display_style == "nightowl" and not fallback then
                     bg_color = G_reader_settings:isTrue("night_mode") and Blitbuffer.COLOR_WHITE or Blitbuffer.COLOR_BLACK
                 end
 
@@ -646,6 +646,7 @@ function WeatherLockscreen:createFallbackWidget()
         width = icon_size,
         height = icon_size,
         alpha = true,
+        original_in_nightmode = false
     }
 
     return CenterContainer:new {
@@ -660,10 +661,12 @@ end
 function WeatherLockscreen:createWeatherWidget()
     logger.dbg("WeatherLockscreen: Creating widget")
     local weather_data = self:fetchWeatherData()
+    local fallback = false
 
     if not weather_data or not weather_data.current or not weather_data.current.icon_path then
         logger.warn("WeatherLockscreen: No weather data available, trying fallback")
-        return self:createFallbackWidget()
+        fallback = true
+        return self:createFallbackWidget(), fallback
     end
 
     -- Check display style setting
@@ -684,7 +687,7 @@ function WeatherLockscreen:createWeatherWidget()
         display_module = require("display_default")
     end
 
-    return display_module:create(self, weather_data)
+    return display_module:create(self, weather_data), fallback
 end
 
 return WeatherLockscreen
