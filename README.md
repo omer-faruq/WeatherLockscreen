@@ -163,6 +163,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 <details>
 <summary>Backlog</summary>
 
+- Periodically refresh the lockscreen
 - A transparent display mode (either transparent image over weather or transparent weather over image)
 - Attempt connecting to wifi: See #1
 - Fallback: A more configurable fallback, when no weather data is available.
