@@ -327,10 +327,10 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
         end
 
         -- Spacer to push right content to the right
-    local left_width = page_text ~= "" and TextWidget:new{
-        text = page_text,
-        face = Font:getFace("cfont", progress_font_size),
-    }:getSize().w or 0
+        local left_width = page_text ~= "" and TextWidget:new {
+            text = page_text,
+            face = Font:getFace("cfont", progress_font_size),
+        }:getSize().w or 0
 
         local right_content = {}
 
@@ -360,7 +360,7 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
         }
 
         local right_width = right_group:getSize().w
-        local spacer_width = math.max(0, screen_width * CARD_WIDTH - left_width - right_width - 2 * card_padding)
+        local spacer_width = math.max(0, screen_width * CARD_WIDTH - left_width - right_width - card_padding)
 
         table.insert(bottom_row, HorizontalSpan:new { width = spacer_width })
         table.insert(bottom_row, right_group)
