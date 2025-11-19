@@ -88,7 +88,7 @@ function DefaultDisplay:create(weather_lockscreen, weather_data)
         -- Today's hourly forecast
         if weather_data.hourly_today_all and #weather_data.hourly_today_all > 0 then
             table.insert(widgets, TextWidget:new {
-                text = _("Heute"),
+                text = _("Today"),
                 face = Font:getFace("cfont", label_font_size),
                 bold = true,
             })
