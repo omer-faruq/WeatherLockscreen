@@ -100,7 +100,7 @@ The plugin offers several display formats to customize your lockscreen:
 
 1. **Data Fetching**: Weather data is automatically fetched from WeatherAPI.com when your device enters sleep mode
    * To avoid unnecessary api calls, the data is only refreshed, if the cached data is older than 30 minutes.
-   * Changing the location, the temperature unit or deleting the cache forces an update.
+   * Changing the location or deleting the cache forces an update.
 2. **Caching**: Data is cached locally for a configurable amount of time (1h - 24h)
 3. **Offline Mode**: If the API request fails or no internet connection is available, the plugin uses cached data
 4. **Fallback Display**: If no cached data is available, displays a sun/moon icon based on the current time of day

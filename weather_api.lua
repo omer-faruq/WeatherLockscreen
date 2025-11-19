@@ -115,7 +115,6 @@ function WeatherAPI:fetchWeatherData(weather_lockscreen)
 end
 
 function WeatherAPI:processWeatherData(result)
-    local temp_scale = G_reader_settings:readSetting("weather_temp_scale") or "C"
     local twelve_hour_clock = G_reader_settings:isTrue("twelve_hour_clock")
     local lang = WeatherUtils:shouldTranslateWeather() and WeatherUtils:koLangAsWeatherAPILang() or "en"
 
@@ -123,27 +122,15 @@ function WeatherAPI:processWeatherData(result)
     local condition = result.current.condition.text
     local icon_path = self:getIconPath(result.current.condition.icon)
 
-    local temperature
-    if temp_scale == "C" then
-        temperature = math.floor(result.current.temp_c) .. "°C"
-    else
-        temperature = math.floor(result.current.temp_f) .. "°F"
-    end
-
-    local feels_like
-    if temp_scale == "C" then
-        feels_like = math.floor(result.current.feelslike_c) .. "°C"
-    else
-        feels_like = math.floor(result.current.feelslike_f) .. "°F"
-    end
-
     local current_data = {
         icon_path = icon_path,
-        temperature = temperature,
+        temp_c = math.floor(result.current.temp_c),
+        temp_f = math.floor(result.current.temp_f),
         condition = condition,
         location = result.location and result.location.name or nil,
         timestamp = result.location and result.location.localtime or os.date("%Y-%m-%d %H:%M"),
-        feels_like = feels_like,
+        feelslike_c = math.floor(result.current.feelslike_c),
+        feelslike_f = math.floor(result.current.feelslike_f),
         humidity = result.current.humidity and (result.current.humidity .. "%") or nil,
         wind = result.current.wind_kph and (math.floor(result.current.wind_kph) .. " km/h") or nil,
         wind_dir = result.current.wind_dir or nil,
@@ -162,7 +149,7 @@ function WeatherAPI:processWeatherData(result)
         }
     end
 
-    -- Extract ALL hourly data (for extended displays)
+    -- Extract hourly data
     local hourly_today = {}
     local hourly_tomorrow = {}
 
@@ -173,16 +160,14 @@ function WeatherAPI:processWeatherData(result)
                 local hour = tonumber(hour_data.time:match("(%d+):00$"))
                 if hour then
                     local h_icon_path = self:getIconPath(hour_data.condition.icon)
-                    local h_temp = temp_scale == "C"
-                        and math.floor(hour_data.temp_c) .. "°"
-                        or math.floor(hour_data.temp_f) .. "°"
 
-                    -- Add all hours (not just target hours)
+                    -- Add all hours
                     table.insert(hourly_today, {
                         hour = WeatherUtils:formatHourLabel(hour, twelve_hour_clock),
                         hour_num = hour,
                         icon_path = h_icon_path,
-                        temperature = h_temp,
+                        temp_c = math.floor(hour_data.temp_c),
+                        temp_f = math.floor(hour_data.temp_f),
                         condition = hour_data.condition.text,
                     })
                 end
@@ -195,15 +180,13 @@ function WeatherAPI:processWeatherData(result)
                 local hour = tonumber(hour_data.time:match("(%d+):00$"))
                 if hour then
                     local h_icon_path = self:getIconPath(hour_data.condition.icon)
-                    local h_temp = temp_scale == "C"
-                        and math.floor(hour_data.temp_c) .. "°"
-                        or math.floor(hour_data.temp_f) .. "°"
 
                     table.insert(hourly_tomorrow, {
                         hour = WeatherUtils:formatHourLabel(hour, twelve_hour_clock),
                         hour_num = hour,
                         icon_path = h_icon_path,
-                        temperature = h_temp,
+                        temp_c = math.floor(hour_data.temp_c),
+                        temp_f = math.floor(hour_data.temp_f),
                         condition = hour_data.condition.text,
                     })
                 end
@@ -238,17 +221,13 @@ function WeatherAPI:processWeatherData(result)
                     end
                 end
 
-                local high_temp = temp_scale == "C"
-                    and math.floor(day_data.day.maxtemp_c) .. "°"
-                    or math.floor(day_data.day.maxtemp_f) .. "°"
-                local low_temp = temp_scale == "C"
-                    and math.floor(day_data.day.mintemp_c) .. "°"
-                    or math.floor(day_data.day.mintemp_f) .. "°"
-
                 table.insert(forecast_days, {
                     day_name = day_name,
                     icon_path = self:getIconPath(day_data.day.condition.icon),
-                    high_low = high_temp .. " / " .. low_temp,
+                    high_c = math.floor(day_data.day.maxtemp_c),
+                    high_f = math.floor(day_data.day.maxtemp_f),
+                    low_c = math.floor(day_data.day.mintemp_c),
+                    low_f = math.floor(day_data.day.mintemp_f),
                     condition = day_data.day.condition.text,
                 })
             end

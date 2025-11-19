@@ -65,13 +65,11 @@ function DefaultDisplay:create(weather_lockscreen, weather_data)
         }
         table.insert(current_widgets, icon_widget)
 
-        if weather_data.current.temperature then
-            table.insert(current_widgets, TextWidget:new {
-                text = weather_data.current.temperature,
-                face = Font:getFace("cfont", temp_font_size),
-                bold = true,
-            })
-        end
+        table.insert(current_widgets, TextWidget:new {
+            text = WeatherUtils:getCurrentTemp(weather_data),
+            face = Font:getFace("cfont", temp_font_size),
+            bold = true,
+        })
 
         if weather_data.current.condition then
             table.insert(current_widgets, TextWidget:new {
@@ -129,7 +127,7 @@ function DefaultDisplay:create(weather_lockscreen, weather_data)
                     end
 
                     table.insert(hour_widgets, TextWidget:new {
-                        text = hour_data.temperature,
+                        text = WeatherUtils:getHourlyTemp(hour_data, false),
                         face = Font:getFace("cfont", hour_font_size),
                     })
 
@@ -190,7 +188,7 @@ function DefaultDisplay:create(weather_lockscreen, weather_data)
                     end
 
                     table.insert(hour_widgets, TextWidget:new {
-                        text = hour_data.temperature,
+                        text = WeatherUtils:getHourlyTemp(hour_data, false),
                         face = Font:getFace("cfont", hour_font_size),
                     })
 

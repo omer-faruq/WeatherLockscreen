@@ -219,13 +219,11 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
         -- Left side: Book title and author
         local book_info = {}
         if doc_info.title then
-
-            local top_right_width = weather_data.current.temperature and
-                TextWidget:new{
-                    text = weather_data.current.temperature,
-                    face = Font:getFace("cfont", temp_font_size),
-                }:getSize().w or 0
-                top_right_width = top_right_width + weather_icon_size
+            local top_right_width = TextWidget:new {
+                text = WeatherUtils:getCurrentTemp(weather_data),
+                face = Font:getFace("cfont", temp_font_size),
+            }:getSize().w
+            top_right_width = top_right_width + weather_icon_size
             local title_width = math.floor(screen_width * CARD_WIDTH - top_right_width - 2 * card_padding)
             table.insert(book_info, TextBoxWidget:new {
                 text = doc_info.title,
@@ -267,14 +265,12 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
             table.insert(weather_group, HorizontalSpan:new { width = small_spacing })
         end
 
-        if weather_data.current.temperature then
-            table.insert(weather_group, TextWidget:new {
-                text = weather_data.current.temperature,
-                face = Font:getFace("cfont", temp_font_size),
-                bold = true,
-                fgcolor = Blitbuffer.COLOR_BLACK,
-            })
-        end
+        table.insert(weather_group, TextWidget:new {
+            text = WeatherUtils:getCurrentTemp(weather_data),
+            face = Font:getFace("cfont", temp_font_size),
+            bold = true,
+            fgcolor = Blitbuffer.COLOR_BLACK,
+        })
 
         table.insert(top_row, weather_group)
 

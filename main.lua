@@ -236,7 +236,6 @@ function WeatherLockscreen:getSubMenuItems()
                     callback = function(touchmenu_instance)
                         G_reader_settings:saveSetting("weather_temp_scale", "C")
                         G_reader_settings:flush()
-                        WeatherLockscreen.refresh = true
                         logger.dbg("WeatherLockscreen: Saved temp scale: C")
                         touchmenu_instance:updateItems()
                     end,
@@ -251,7 +250,6 @@ function WeatherLockscreen:getSubMenuItems()
                     keep_menu_open = true,
                     callback = function(touchmenu_instance)
                         G_reader_settings:saveSetting("weather_temp_scale", "F")
-                        WeatherLockscreen.refresh = true
                         G_reader_settings:flush()
                         logger.dbg("WeatherLockscreen: Saved temp scale: F")
                         touchmenu_instance:updateItems()

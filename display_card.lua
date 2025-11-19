@@ -13,6 +13,7 @@ local Font = require("ui/font")
 local Device = require("device")
 local Screen = Device.screen
 local Blitbuffer = require("ffi/blitbuffer")
+local WeatherUtils = require("weather_utils")
 
 local CardDisplay = {}
 
@@ -54,32 +55,26 @@ function CardDisplay:create(weather_lockscreen, weather_data)
         end
 
         -- Temperature
-        if weather_data.current.temperature then
-            table.insert(widgets, TextWidget:new{
-                text = weather_data.current.temperature,
-                face = Font:getFace("cfont", temp_font_size),
-                bold = true,
-            })
-            table.insert(widgets, VerticalSpan:new{ width = math.floor(spacing * 0.3) })
-        end
+        table.insert(widgets, TextWidget:new{
+            text = WeatherUtils:getCurrentTemp(weather_data),
+            face = Font:getFace("cfont", temp_font_size),
+            bold = true,
+        })
+        table.insert(widgets, VerticalSpan:new{ width = math.floor(spacing * 0.3) })
 
         -- Condition
-        if weather_data.current.condition then
-            table.insert(widgets, TextWidget:new{
-                text = weather_data.current.condition,
-                face = Font:getFace("cfont", condition_font_size),
-            })
-            table.insert(widgets, VerticalSpan:new{ width = spacing })
-        end
+        table.insert(widgets, TextWidget:new{
+            text = weather_data.current.condition,
+            face = Font:getFace("cfont", condition_font_size),
+        })
+        table.insert(widgets, VerticalSpan:new{ width = spacing })
 
         -- High/Low if available
-        if weather_data.forecast_days and weather_data.forecast_days[1] and weather_data.forecast_days[1].high_low then
-            table.insert(widgets, TextWidget:new{
-                text = weather_data.forecast_days[1].high_low,
-                face = Font:getFace("cfont", detail_font_size),
-                fgcolor = Blitbuffer.COLOR_DARK_GRAY,
-            })
-        end
+        table.insert(widgets, TextWidget:new{
+            text = WeatherUtils:getForecastHighLow(weather_data.forecast_days[1]),
+            face = Font:getFace("cfont", detail_font_size),
+            fgcolor = Blitbuffer.COLOR_DARK_GRAY,
+        })
 
         return VerticalGroup:new{
             align = "center",

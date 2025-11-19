@@ -10,6 +10,66 @@ local util = require("util")
 
 local WeatherUtils = {}
 
+-- Get temperature scale setting
+function WeatherUtils:getTempScale()
+    return G_reader_settings:readSetting("weather_temp_scale") or "C"
+end
+
+-- Format temperature from weather data based on user settings
+function WeatherUtils:formatTemp(temp_c, temp_f, with_unit)
+    if not temp_c or not temp_f then
+        return nil
+    end
+
+    local temp_scale = self:getTempScale()
+    if with_unit == nil then with_unit = true end
+
+    if temp_scale == "C" then
+        return with_unit and (temp_c .. "°C") or (temp_c .. "°")
+    else
+        return with_unit and (temp_f .. "°F") or (temp_f .. "°")
+    end
+end
+
+-- Get current temperature formatted
+function WeatherUtils:getCurrentTemp(weather_data, with_unit)
+    if not weather_data or not weather_data.current then
+        return nil
+    end
+    return self:formatTemp(weather_data.current.temp_c, weather_data.current.temp_f, with_unit)
+end
+
+-- Get hourly temperature formatted
+function WeatherUtils:getHourlyTemp(hour_data, with_unit)
+    if not hour_data then
+        return nil
+    end
+    return self:formatTemp(hour_data.temp_c, hour_data.temp_f, with_unit)
+end
+
+-- Get forecast high/low formatted
+function WeatherUtils:getForecastHighLow(day_data)
+    if not day_data or not day_data.high_c or not day_data.low_c then
+        return nil
+    end
+
+    local temp_scale = self:getTempScale()
+    if temp_scale == "C" then
+        return day_data.high_c .. "° / " .. day_data.low_c .. "°"
+    else
+        return day_data.high_f .. "° / " .. day_data.low_f .. "°"
+    end
+end
+
+-- Get raw temperature value (number only, for calculations)
+function WeatherUtils:getTempValue(weather_data)
+    if not weather_data or not weather_data.current then
+        return nil
+    end
+
+    local temp_scale = self:getTempScale()
+    return temp_scale == "C" and weather_data.current.temp_c or weather_data.current.temp_f
+end
 
 function WeatherUtils:formatHourLabel(hour, twelve_hour_clock)
     if twelve_hour_clock then

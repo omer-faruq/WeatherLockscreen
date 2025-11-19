@@ -16,6 +16,7 @@ local Device = require("device")
 local Screen = Device.screen
 local Blitbuffer = require("ffi/blitbuffer")
 local DataStorage = require("datastorage")
+local WeatherUtils = require("weather_utils")
 
 local RetroAnalogDisplay = {}
 
@@ -35,9 +36,9 @@ function RetroAnalogDisplay:create(weather_lockscreen, weather_data)
     local screen_height = Screen:getHeight()
 
     -- Extract temperature value for thermometer
-    local temp_value = weather_data.current.temperature
-    local temp_num = tonumber(temp_value:match("(-?%d+)"))
-    local temp_scale = G_reader_settings:readSetting("weather_temp_scale") or "C"
+    local temp_value = WeatherUtils:getCurrentTemp(weather_data)
+    local temp_num = WeatherUtils:getTempValue(weather_data)
+    local temp_scale = WeatherUtils:getTempScale()
 
     -- Build retro weather content with given scale factor
     local function buildRetroContent(scale_factor)
