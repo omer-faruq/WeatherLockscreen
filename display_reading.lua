@@ -25,7 +25,8 @@ local Geom = require("ui/geometry")
 local util = require("util")
 local logger = require("logger")
 local datetime = require("datetime")
-local _ = require("gettext")
+local _ = require("l10n/gettext")
+local T = require("ffi/util").template
 local WeatherUtils = require("weather_utils")
 
 local ReadingDisplay = {}
@@ -127,7 +128,7 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
         return fallback_module:create(weather_lockscreen, weather_data)
     end
 
-    -- Background: Large book cover fitted or stretched to screen
+    -- Background: Large book cover fitted or zoom to fill the screen
     local background_widget
     if doc_info.cover_bb then
         local cover_bb = doc_info.cover_bb
@@ -139,11 +140,11 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
 
         -- Scale cover based on preference
         local scale
-        if cover_scaling == "stretch" then
-            -- Stretch to fill screen (may crop)
+        if cover_scaling == "zoom" then
+            -- Zoom to fill screen (may crop)
             scale = math.max(screen_width / cover_width, screen_height / cover_height)
         else
-            -- Fit to screen (no stretching - maintains aspect ratio)
+            -- Fit to screen (no cropping)
             scale = math.min(screen_width / cover_width, screen_height / cover_height)
         end
 
@@ -314,7 +315,7 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
         -- Left: Page numbers
         local page_text = ""
         if doc_info.page_no and doc_info.page_total then
-            page_text = WeatherUtils:shouldTranslateWeather() and (doc_info.page_no .. " / " .. doc_info.page_total) or string.format("Page %i of %i", doc_info.page_no, doc_info.page_total)
+            page_text = T(_("Page %1 of %2"), doc_info.page_no, doc_info.page_total)
         table.insert(bottom_row, TextWidget:new{
                 text = page_text,
                 face = Font:getFace("cfont", progress_font_size),

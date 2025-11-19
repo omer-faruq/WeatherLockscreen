@@ -6,6 +6,7 @@
 local DataStorage = require("datastorage")
 local logger = require("logger")
 local WeatherUtils = require("weather_utils")
+local _ = require("l10n/gettext")
 
 local WeatherAPI = {}
 
@@ -37,10 +38,7 @@ function WeatherAPI:fetchWeatherData(weather_lockscreen)
         api_key = weather_lockscreen.default_api_key
     end
 
-    local lang = "en"
-    if WeatherUtils:shouldTranslateWeather() then
-        lang = WeatherUtils:koLangAsWeatherAPILang()
-    end
+    local lang = WeatherUtils:koLangAsWeatherAPILang()
 
     logger.dbg("WeatherLockscreen: Using location:", location)
     logger.dbg("WeatherLockscreen: Using API key:", api_key and (api_key:sub(1, 8) .. "...") or "none")
@@ -116,7 +114,7 @@ end
 
 function WeatherAPI:processWeatherData(result)
     local twelve_hour_clock = G_reader_settings:isTrue("twelve_hour_clock")
-    local lang = WeatherUtils:shouldTranslateWeather() and WeatherUtils:koLangAsWeatherAPILang() or "en"
+    local lang = WeatherUtils:koLangAsWeatherAPILang() or "en"
 
     -- Process current weather
     local condition = result.current.condition.text
@@ -202,9 +200,9 @@ function WeatherAPI:processWeatherData(result)
             if day_data and day_data.day then
                 local day_name
                 if i == 1 then
-                    day_name = "Today"
+                    day_name = _("Today")
                 elseif i == 2 then
-                    day_name = "Tomorrow"
+                    day_name = _("Tomorrow")
                 else
                     -- Parse date and get day name
                     local date_str = day_data.date
