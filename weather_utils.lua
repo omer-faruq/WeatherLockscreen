@@ -163,7 +163,7 @@ function WeatherUtils:getMinDelayBetweenUpdates()
 end
 
 -- This function was inspired by Project: Title. Thanks!
-function WeatherUtils:installIcons(plugin_dir_func)
+function WeatherUtils:installIcons()
     local icons_path = DataStorage:getDataDir() .. "/icons"
     local icons_list = {
         "sun",
@@ -272,7 +272,7 @@ function WeatherUtils:installIcons(plugin_dir_func)
     end
 
     if util.directoryExists(icons_path) then
-        local plugin_dir = plugin_dir_func()
+        local plugin_dir = self:getPluginDir()
         if not plugin_dir then
             logger.warn("WeatherLockscreen: plugin dir unknown; cannot copy bundled icons")
             return false
@@ -348,7 +348,7 @@ function WeatherUtils:saveWeatherCache(weather_data)
     return false
 end
 
-function WeatherUtils:loadWeatherCache(get_max_age_func)
+function WeatherUtils:loadWeatherCache(max_age)
     local cache_file = DataStorage:getDataDir() .. "/cache/weather-lockscreen.json"
     local f = io.open(cache_file, "r")
     if not f then
@@ -365,7 +365,7 @@ function WeatherUtils:loadWeatherCache(get_max_age_func)
     end
 
     local age = os.time() - cache_data.timestamp
-    if age > get_max_age_func() then
+    if age > max_age then
         logger.dbg("WeatherLockscreen: Cache too old")
         return nil
     end
@@ -404,6 +404,84 @@ function WeatherUtils:clearCache()
     end
 
     return cleared
+end
+
+function WeatherUtils:createHeaderWidgets(header_font_size, header_margin, weather_data, text_color, is_cached)
+    local Screen = require("device").screen
+    local Font = require("ui/font")
+    local LeftContainer = require("ui/widget/container/leftcontainer")
+    local RightContainer = require("ui/widget/container/rightcontainer")
+    local FrameContainer = require("ui/widget/container/framecontainer")
+    local TextWidget = require("ui/widget/textwidget")
+    local OverlapGroup = require("ui/widget/overlapgroup")
+
+    local header_widgets = {}
+    local show_header = G_reader_settings:nilOrTrue("weather_show_header")
+
+    if show_header and weather_data.current.location then
+        table.insert(header_widgets, LeftContainer:new {
+            dimen = { w = Screen:getWidth(), h = header_font_size + header_margin * 2 },
+            FrameContainer:new {
+                padding = header_margin,
+                margin = 0,
+                bordersize = 0,
+                TextWidget:new {
+                    text = weather_data.current.location,
+                    face = Font:getFace("cfont", header_font_size),
+                    fgcolor = text_color,
+                },
+            },
+        })
+    end
+
+    if show_header and weather_data.current.timestamp then
+        local timestamp = weather_data.current.timestamp
+        local year, month, day, hour, min = timestamp:match("(%d+)-(%d+)-(%d+) (%d+):(%d+)")
+        local formatted_time = ""
+        if year and month and day and hour and min then
+            -- Use os.date for localized month abbreviation
+            local time_obj = os.time{year=tonumber(year), month=tonumber(month), day=tonumber(day)}
+            local date_str = os.date("%b %d", time_obj)
+            local twelve_hour_clock = G_reader_settings:isTrue("twelve_hour_clock")
+            local hour_num = tonumber(hour)
+            local time_str
+            if twelve_hour_clock then
+                local period = hour_num >= 12 and "PM" or "AM"
+                local display_hour = hour_num % 12
+                if display_hour == 0 then display_hour = 12 end
+                time_str = display_hour .. ":" .. min .. " " .. period
+            else
+                time_str = hour .. ":" .. min
+            end
+            formatted_time = date_str .. ", " .. time_str
+        else
+            formatted_time = timestamp
+        end
+
+        -- Add asterisk if data is cached
+        if is_cached then
+            formatted_time = formatted_time .. " *"
+        end
+
+        table.insert(header_widgets, RightContainer:new {
+            dimen = { w = Screen:getWidth(), h = header_font_size + header_margin * 2 },
+            FrameContainer:new {
+                padding = header_margin,
+                margin = 0,
+                bordersize = 0,
+                TextWidget:new {
+                    text = formatted_time,
+                    face = Font:getFace("cfont", header_font_size),
+                    fgcolor = text_color,
+                },
+            },
+        })
+    end
+
+    return OverlapGroup:new {
+        dimen = { w = Screen:getWidth(), h = header_font_size + header_margin * 2 },
+        unpack(header_widgets)
+    }
 end
 
 WeatherUtils.target_hours = { 6, 12, 18 } -- For basic display

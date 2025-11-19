@@ -41,24 +41,8 @@ local WeatherLockscreen = WidgetContainer:extend {
 
 local WEATHER_ICON_SIZE = 200 -- Size of the weather icon in pixels
 
-function WeatherLockscreen:getCacheMaxAge()
-    return WeatherUtils:getCacheMaxAge()
-end
-
-function WeatherLockscreen:getMinDelayBetweenUpdates()
-    return WeatherUtils:getMinDelayBetweenUpdates()
-end
-
-function WeatherLockscreen:getPluginDir()
-    return WeatherUtils:getPluginDir()
-end
-
-function WeatherLockscreen:installIcons()
-    return WeatherUtils:installIcons(function() return self:getPluginDir() end)
-end
-
 function WeatherLockscreen:init()
-    self:installIcons()
+    WeatherUtils:installIcons()
     self.ui.menu:registerToMainMenu(self)
     self:patchScreensaver()
 end
@@ -535,103 +519,16 @@ function WeatherLockscreen:patchScreensaver()
     end
 end
 
--- Weather API functions
+function WeatherLockscreen:createHeaderWidgets(header_font_size, header_margin, weather_data, text_color, is_cached)
+    return WeatherUtils:createHeaderWidgets(header_font_size, header_margin, weather_data, text_color, is_cached)
+end
+
 function WeatherLockscreen:fetchWeatherData()
     return WeatherAPI:fetchWeatherData(self)
 end
 
-function WeatherLockscreen:formatHourLabel(hour, twelve_hour_clock)
-    return WeatherUtils:formatHourLabel(hour, twelve_hour_clock)
-end
-
-function WeatherLockscreen:getMoonPhaseIcon(moon_phase)
-    return WeatherUtils:getMoonPhaseIcon(moon_phase)
-end
-
-function WeatherLockscreen:getIconPath(icon_url_from_api)
-    return WeatherAPI:getIconPath(icon_url_from_api)
-end
-
-function WeatherLockscreen:saveWeatherCache(weather_data)
-    return WeatherUtils:saveWeatherCache(weather_data)
-end
-
-function WeatherLockscreen:loadWeatherCache()
-    return WeatherUtils:loadWeatherCache(function() return self:getCacheMaxAge() end)
-end
-
 function WeatherLockscreen:clearCache()
     return WeatherUtils:clearCache()
-end
-
-function WeatherLockscreen:createHeaderWidgets(header_font_size, header_margin, weather_data, text_color, is_cached)
-    local header_widgets = {}
-    local show_header = G_reader_settings:nilOrTrue("weather_show_header")
-
-    if show_header and weather_data.current.location then
-        table.insert(header_widgets, LeftContainer:new {
-            dimen = { w = Screen:getWidth(), h = header_font_size + header_margin * 2 },
-            FrameContainer:new {
-                padding = header_margin,
-                margin = 0,
-                bordersize = 0,
-                TextWidget:new {
-                    text = weather_data.current.location,
-                    face = Font:getFace("cfont", header_font_size),
-                    fgcolor = text_color,
-                },
-            },
-        })
-    end
-
-    if show_header and weather_data.current.timestamp then
-        local timestamp = weather_data.current.timestamp
-        local year, month, day, hour, min = timestamp:match("(%d+)-(%d+)-(%d+) (%d+):(%d+)")
-        local formatted_time = ""
-        if year and month and day and hour and min then
-            -- Use os.date for localized month abbreviation
-            local time_obj = os.time{year=tonumber(year), month=tonumber(month), day=tonumber(day)}
-            local date_str = os.date("%b %d", time_obj)
-            local twelve_hour_clock = G_reader_settings:isTrue("twelve_hour_clock")
-            local hour_num = tonumber(hour)
-            local time_str
-            if twelve_hour_clock then
-                local period = hour_num >= 12 and "PM" or "AM"
-                local display_hour = hour_num % 12
-                if display_hour == 0 then display_hour = 12 end
-                time_str = display_hour .. ":" .. min .. " " .. period
-            else
-                time_str = hour .. ":" .. min
-            end
-            formatted_time = date_str .. ", " .. time_str
-        else
-            formatted_time = timestamp
-        end
-
-        -- Add asterisk if data is cached
-        if is_cached then
-            formatted_time = formatted_time .. " *"
-        end
-
-        table.insert(header_widgets, RightContainer:new {
-            dimen = { w = Screen:getWidth(), h = header_font_size + header_margin * 2 },
-            FrameContainer:new {
-                padding = header_margin,
-                margin = 0,
-                bordersize = 0,
-                TextWidget:new {
-                    text = formatted_time,
-                    face = Font:getFace("cfont", header_font_size),
-                    fgcolor = text_color,
-                },
-            },
-        })
-    end
-
-    return OverlapGroup:new {
-        dimen = { w = Screen:getWidth(), h = header_font_size + header_margin * 2 },
-        unpack(header_widgets)
-    }
 end
 
 function WeatherLockscreen:createFallbackWidget()

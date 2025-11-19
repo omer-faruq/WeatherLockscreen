@@ -45,7 +45,7 @@ function WeatherAPI:fetchWeatherData(weather_lockscreen)
     logger.dbg("WeatherLockscreen: Using language:", lang)
 
     if not refresh_required then
-        local cached_data = WeatherUtils:loadWeatherCache(function() return weather_lockscreen:getMinDelayBetweenUpdates() end)
+        local cached_data = WeatherUtils:loadWeatherCache(WeatherUtils:getMinDelayBetweenUpdates())
         if cached_data and lang == cached_data.lang then
             logger.dbg("WeatherLockscreen: Using cache to avoid repeated requests")
             cached_data.is_cached = true
@@ -55,7 +55,7 @@ function WeatherAPI:fetchWeatherData(weather_lockscreen)
 
     if not api_key or api_key == "" then
         logger.warn("WeatherLockscreen: No API key configured")
-        local cached_data = WeatherUtils:loadWeatherCache(function() return weather_lockscreen:getCacheMaxAge() end)
+        local cached_data = WeatherUtils:loadWeatherCache(WeatherUtils:getCacheMaxAge())
         if cached_data then
             cached_data.is_cached = true
         end
@@ -79,7 +79,7 @@ function WeatherAPI:fetchWeatherData(weather_lockscreen)
     local code, err = http_request_code(url, sink_table)
     if not code then
         logger.warn("WeatherLockscreen: HTTP request failed:", err or "unknown error")
-        local cached_data = WeatherUtils:loadWeatherCache(function() return weather_lockscreen:getCacheMaxAge() end)
+        local cached_data = WeatherUtils:loadWeatherCache(WeatherUtils:getCacheMaxAge())
         if cached_data then
             cached_data.is_cached = true
         end
@@ -105,7 +105,7 @@ function WeatherAPI:fetchWeatherData(weather_lockscreen)
     end
 
     -- Try cache if fetch failed
-    local cached_data = WeatherUtils:loadWeatherCache(function() return weather_lockscreen:getCacheMaxAge() end)
+    local cached_data = WeatherUtils:loadWeatherCache(WeatherUtils:getCacheMaxAge())
     if cached_data then
         cached_data.is_cached = true
     end

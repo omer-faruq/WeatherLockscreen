@@ -30,7 +30,7 @@ function NightOwlDisplay:create(weather_lockscreen, weather_data)
     -- Main content - centered moon icon
     local moon_icon_widget = nil
     if weather_data.astronomy and weather_data.astronomy.moon_phase then
-        local moon_icon_path = weather_lockscreen:getMoonPhaseIcon(weather_data.astronomy.moon_phase)
+        local moon_icon_path = WeatherUtils:getMoonPhaseIcon(weather_data.astronomy.moon_phase)
         if moon_icon_path then
             moon_icon_widget = CenterContainer:new{
                 dimen = Screen:getSize(),
