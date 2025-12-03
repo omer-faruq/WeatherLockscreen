@@ -35,6 +35,7 @@ local WeatherLockscreen = WidgetContainer:extend {
 function WeatherLockscreen:init()
     WeatherUtils:installIcons()
     self.ui.menu:registerToMainMenu(self)
+    self:patchDofile()
     self:patchScreensaver()
 end
 
@@ -113,7 +114,10 @@ function WeatherLockscreen:patchScreensaver()
             Screensaver._orig_show_before_weather(screensaver_instance)
         end
     end
+end
 
+
+function WeatherLockscreen:patchDofile()
     -- Patch the screensaver menu to add weather option
     -- We need to override dofile to inject our menu item
     if not _G._orig_dofile_before_weather then
