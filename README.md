@@ -128,6 +128,7 @@ The plugin supports multiple languages through a hybrid localization approach:
 
 **Fully Translated Languages:**
 - 🇩🇪 German (de) - Complete
+- 🇪🇸 Spanish (es) - Complete by @jeubm
 
 **English (en)** - Default language (no translation needed)
 
