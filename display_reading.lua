@@ -342,7 +342,7 @@ function ReadingDisplay:create(weather_lockscreen, weather_data)
 
         -- Location and time
         local current_time = datetime.secondsToHour(os.time(), G_reader_settings:isTrue("twelve_hour_clock"))
-        local location = G_reader_settings:readSetting("weather_location") or "Unknown"
+        local location = G_reader_settings:readSetting("weather_location_name") or "Unknown"
         local location_time = string.format("%s • %s", location, current_time)
 
         table.insert(right_content, TextWidget:new {
