@@ -113,8 +113,8 @@ To enable this feature:
 #### How it works:
 - The device will wake up from sleep at the specified interval to refresh weather data.
 - After updating, the device will return to sleep mode automatically.
-- This feature is only available on Kindle devices (because Kobo and Android devices handle sleep differently and I do not have the devices to test on.)
 - This feature will increase battery consumption slightly, depending on the interval set. However, the device will still spend most of the time in sleep mode.
+- Since version v0.9.5-beta.1, Active Sleep will stop when the battery falls below a configurable threshold (default: 20%) to conserve battery life.
 
 ### Dasboard
 For devices that do not support `Active Sleep`, you can use the Dashboard feature to show live weather data.

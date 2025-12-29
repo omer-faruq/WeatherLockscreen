@@ -139,11 +139,11 @@ function WeatherUtils:getPluginDir()
 end
 
 function WeatherUtils:getCacheMaxAge()
-    return G_reader_settings:readSetting("weather_cache_max_age") or 3600  -- Default: 1 hour
+    return G_reader_settings:readSetting("weather_cache_max_age") or 3600 -- Default: 1 hour
 end
 
 function WeatherUtils:getMinDelayBetweenUpdates()
-    return G_reader_settings:readSetting("weather_min_update_delay") or 1800  -- Default: 30 minutes
+    return G_reader_settings:readSetting("weather_min_update_delay") or 1800 -- Default: 30 minutes
 end
 
 -- This function was inspired by Project: Title. Thanks!
@@ -536,7 +536,8 @@ function WeatherUtils:safeGoOnlineToRun(callback, fallback_callback, suppress_ne
         if wifi_disable_action == "prompt" then
             -- Don't call afterWifiAction when set to "prompt" - that would require user interaction
             -- For an unattended weather display, we treat "prompt" as "leave_on" (do nothing)
-            logger.dbg("WeatherLockscreen: wifi_disable_action is 'prompt', skipping afterWifiAction to avoid user interaction")
+            logger.dbg(
+                "WeatherLockscreen: wifi_disable_action is 'prompt', skipping afterWifiAction to avoid user interaction")
             return
         end
 
@@ -632,18 +633,13 @@ end
 
 function WeatherUtils:canScheduleWakeup()
     local Device = require("device")
-
-    -- By default, only Kindle is supported (tested)
-    -- Kobo support is experimental - enabled when debug mode is on
     if Device:isKindle() then
         return true
     end
 
     if Device:isKobo() then
-        -- Allow Kobo RTC wakeup when debug mode is enabled
-        return G_reader_settings:isTrue("weather_debug_options")
+        return true
     end
-
     return false
 end
 
